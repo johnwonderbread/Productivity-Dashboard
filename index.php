@@ -63,7 +63,7 @@ $js_array2 = json_encode($seconds);
 #---------------------------------------
 
 
-#gets the categaories for each value for yesterday
+#gets the categories for each value for yesterday
 $categoriesArrayY = array();
 $secondsY = array();
 $totalSecondsY = 0;
@@ -131,9 +131,9 @@ $js_distractiveHours = json_encode($distractiveHours);
 align-items: center;
     color: white;
     position: relative;
-    top:145px;
-    left: 145px;
-    font-size: 100px;
+    top: 100px;
+    left: 80px;
+    font-size: 30px;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   }
   #doughnut{
@@ -143,20 +143,20 @@ align-items: center;
     color: white;
     position: fixed;
 bottom: 0;
-right: 5%;
+right: 2%;
   }
 
   #todo{
     color: white;
-    margin-left: 2%;
-    margin-top: -50px;
-    width: 320px;
+    margin-left: 1%;
+    width: 380px;
+    margin-top: -45px;
   }
   #todo2{
     color: white;
-    margin-left: 32%;
-    width: 320px;
-    margin-top: -50px;
+    margin-left: 50%;
+    width: 380px;
+    margin-top: -105px;
   }
   #container{
 background-color: black;
@@ -166,7 +166,7 @@ canvas{
 }
 
 html{
-font-size: 20px;
+font-size: 12px;
 background-color: black;
 }
 
@@ -176,52 +176,31 @@ font-size: 25px;
 
 }
 #doughnut{
-  margin-left: 40px;
+  margin-left: 20px;
 }
 #LineChartContainer{
   width: 35%;
-  position: fixed;
-  right: 150px;
-  bottom:40px;
+  position: absolute;
+  left: 2px;
+  bottom:130px;
 }
   </style>
 
 
   </head>
   <body>
-<!--    <div id="container" style="width:50%">
-
-<canvas id="myRadarChart" width="400px" height="400px"></canvas>
-    <script>
-    Chart.defaults.global.defaultFontSize = 20;
-    var ctx = document.getElementById("myRadarChart");
-    var myRadarChart = new Chart(ctx, {
-      type: 'radar',
-      data: {
-            labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
-            datasets: [{
-                data: [10, 10, 10, 10]
-    }]
-  },
-    options: { scale: { pointLabels: {
-            fontSize: 20
-          } } }
-            });
-    </script>
-    </div>
--->
 
 <div id="container" style="width:100%">
 <div id="doughnut">
-<div style="margin-left:5%;width:35%; float:left;">
+<div style="margin-left:0%;width:25%; float:left;">
   <div id="percent">
 
 <canvas id="myDoughnutChart" ></canvas>
-<div id="overlay"><?php echo floor(100-(abs($negTotal)*100)/$absTotal); ?></div>
+<div id="overlay" onClick="window.location.reload()"><?php echo floor(100-(abs($negTotal)*100)/$absTotal); ?></div>
 </div>
 </div>
 </div>
-<div id="container2" style="margin-left:50%; width:43%;">
+<div id="container2" style="margin-left:42%; width:50%;">
 <canvas id="myRadarChart" style="position:relative;" ></canvas>
 
 </div>
@@ -234,7 +213,7 @@ font-size: 25px;
 $i=0;
 foreach ($trelloData as $value) {
 
-if ($i<4) {
+if ($i<6) {
   echo "&#x25a2";
   echo " ".$value['name'];
   echo "<br>";
@@ -252,7 +231,7 @@ $i=$i+1;
   $i=0;
   foreach ($trelloData as $value) {
 
-  if ($i>4) {
+  if ($i>=6) {
     echo "&#x25a2";
     echo " ".$value['name'];
     echo "<br>";
@@ -395,7 +374,7 @@ Chart.defaults.global.defaultFontColor = '#fff';
 var myDoughnutChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-          labels: ['Distractive', 'Productive'],
+          labels: ['Distracted', 'Productive'],
           datasets: [{
             backgroundColor: [
         "#ff0000",
@@ -430,7 +409,7 @@ var color = Chart.helpers.color;
 var myRadarChart = new Chart(ctx, {
     type: 'radar',
     data:  {
-    labels: ['Entertainment', 'Software Dev.', 'News&Opinion', 'Learning','communication'],
+    labels: ['Entertainment', 'Software Dev.', 'News&Opinion', 'Learning', 'Email & Chat'],
     datasets: [{
         label: "Minutes Spent Today",
         backgroundColor: color(chartColors.red).alpha(0.5).rgbString(),
@@ -458,7 +437,8 @@ var myRadarChart = new Chart(ctx, {
 options:{
   scale:{
     pointLabels:{
-      fontSize:11
+      fontSize:13
+
     },
     lineArc: true,
     position: "chartArea",
