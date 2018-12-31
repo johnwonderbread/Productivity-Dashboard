@@ -2,44 +2,11 @@
 $page = $_SERVER['PHP_SELF'];
 #Seconds to refresh the webpage
 $sec = "360";
-$ConsumerKeyAPIKey="TfpS7e2C58gTrOyfBJiTEdqoN";
-$ConsumerSecretAPISecret="0P50iRU7g8YnQnjksVhcG44UI7VUYcimwAi5rSN12HPLyd7DjW";
-$access_token="389354485-iNYvlYonPKLF9Q27dx9l18ToCHmcjH2KsBs091pG";
-$access_token_secret="pTAoscNcEAMl8yPP1GLcauTDUlV7nvlDoC8WqZT6uYCJP";
-$NumberOfTags=18; //keep as minimum as possible
-$GeoLocleID="23424977";
-require "twitteroauth/autoload.php";
-use Abraham\TwitterOAuth\TwitterOAuth;
-$connection = new TwitterOAuth($ConsumerKeyAPIKey, $ConsumerSecretAPISecret, $access_token, $access_token_secret);
-$statues = $connection->get("trends/place", ["id" => $GeoLocleID]);
-$stringgerr="";
-$i=1;
-foreach($statues as $hash)
-{    $inner=$hash->trends;
-    foreach($inner as $in)
-    {
-        
-        $value=$in->name;
-        
-        if (strpos($value, '#') !== false) {
-        $value=$value;
-        } else {
-        $value="#".$value;
-        }
-        $stringgerr.=str_replace(" ","_",$value)." ";
-        
-        if($i==$NumberOfTags)
-        break;
-        $i++;
-    }
-    if($i==$NumberOfTags)
-        break;
-};
 $testArray=
-      $trelloUrl=file_get_contents("https://api.trello.com/1/lists/5c279a32c559d774922e4c96/cards?fields=name&key=3eb41f0d472d8ff304bd8c990f0024b6&token=06f3574635413aafdc7ce89989da1494e3ee88b6f32d7165f2ad2043f8534ede");
-      $urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm&perspective=rank&interval=hour&restrict_begin=".date('Y-m-d')."&restrict_end=".date('Y-m-d')."&format=json");
-      $urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm&perspective=rank&interval=hour&restrict_begin=".date('d.m.Y',strtotime("-1 days"))."&restrict_end=".date('d.m.Y',strtotime("-1 days"))."&format=json");
-      $urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm");
+$trelloUrl=file_get_contents("https://api.trello.com/1/lists/5c279a32c559d774922e4c96/cards?fields=name&key=3eb41f0d472d8ff304bd8c990f0024b6&token=06f3574635413aafdc7ce89989da1494e3ee88b6f32d7165f2ad2043f8534ede");
+$urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm&perspective=rank&interval=hour&restrict_begin=".date('Y-m-d')."&restrict_end=".date('Y-m-d')."&format=json");
+$urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm&perspective=rank&interval=hour&restrict_begin=".date('d.m.Y',strtotime("-1 days"))."&restrict_end=".date('d.m.Y',strtotime("-1 days"))."&format=json");
+$urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm");
       $data = json_decode($urlContents,true);
       $dataY = json_decode($urlContentsY,true); #rescuetime yesterday's data
       $data2 = json_decode($urlContents2,true); #recuetime daily summary
@@ -51,7 +18,6 @@ $testArray=
 #print_r($data2);
 #print_r($dataY);
 #print_r($trelloData);
-#print_r($trends);
 #-----------------------------------------------------
 $posTotal = 0; #Positive seconds (seconds spent on a program times the productivity value)
 $negTotal = 0; #Negative seconds (seconds spent on a program times the productivity value)
@@ -59,7 +25,7 @@ $absTotal = 0;
 #this for loop gets seconds spent from the json file
 foreach ($data['rows'] as $key => $value) {
   $productivity = $value[1] * $value[5];
-  print_r($productivity);
+  #print_r($productivity);
   if ($productivity < 0)
 {
    $negTotal = $negTotal + $productivity;
@@ -116,7 +82,6 @@ foreach ($data2 as $value) {
 $js_productiveHours = json_encode($productiveHours);
 $js_distractiveHours = json_encode($distractiveHours);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -143,9 +108,9 @@ $js_distractiveHours = json_encode($distractiveHours);
 align-items: center;
     color: white;
     position: relative;
-    top: 100px;
-    left: 80px;
-    font-size: 30px;
+    top:168px;
+    left: 168px;
+    font-size: 150px;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   }
   #doughnut{
@@ -155,17 +120,18 @@ align-items: center;
     color: white;
     position: fixed;
 bottom: 0;
-right: 2%;
+right: 5%;
   }
   #todo{
     color: white;
-    margin-left: 1%;
-    width: 380px;
-    margin-top: 0px;
+    margin-left: 8%;
+    width: 320px;
   }
   #todo2{
     color: white;
-    width: 380px;
+    margin-left: 32%;
+    width: 320px;
+    margin-top: -150px;
   }
   #container{
 background-color: black;
@@ -173,72 +139,99 @@ background-color: black;
 canvas{
 }
 html{
-font-size: 12px;
+font-size: 25px;
 background-color: black;
 }
 .container{
 font-size: 25px;
 }
 #doughnut{
-  margin-left: 20px;
+  margin-left: 40px;
 }
 #LineChartContainer{
-  width: 40%;
-  position: absolute;
-  left: 35px;
-  bottom:125px;
+  width: 35%;
+  position: fixed;
+  right: 150px;
+  bottom:40px;
 }
   </style>
 
 
   </head>
   <body>
+<!--    <div id="container" style="width:50%">
+<canvas id="myRadarChart" width="400px" height="400px"></canvas>
+    <script>
+    Chart.defaults.global.defaultFontSize = 12;
+    var ctx = document.getElementById("myRadarChart");
+    var myRadarChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+            labels: ['Running', 'Swimming', 'Eating', 'Cycling'],
+            datasets: [{
+                data: [10, 10, 10, 10]
+    }]
+  },
+    options: { scale: { pointLabels: {
+            fontSize: 20
+          } } }
+            });
+    </script>
+    </div>
+-->
 
 <div id="container" style="width:100%">
 <div id="doughnut">
-<div style="margin-left:10%;width:25%; float:left;">
+<div style="margin-left:5%;width:40%; float:left;">
   <div id="percent">
 
 <canvas id="myDoughnutChart" ></canvas>
-<div id="overlay" onClick="window.location.reload()"><?php echo floor(100-(abs($negTotal)*100)/$absTotal); ?></div>
+<div id="overlay"><?php echo floor(100-(abs($negTotal)*100)/$absTotal); ?></div>
 </div>
 </div>
 </div>
-<div id="container2" style="margin-left:50%; width:45%;">
+<div id="container2" style="margin-left:50%; width:40%;">
 <canvas id="myRadarChart" style="position:relative;" ></canvas>
+
 </div>
 <div id="textContainer">
-<?php echo "Total Time (MB Pro + PC + Pixel): ".floor($totalSeconds/60)." Minutes"; ?>
+<?php echo "Total Time (Galaxy S6 + Asus PC): ".floor($totalSeconds/60)." Minutes"; ?>
 </div>
+<div id="todo">
+<h3>To Do:</h3>
 
-<div id="textContainer2" style="width:50%; float:left">
-  <div id="todo">
+<?php
+$i=0;
+foreach ($trelloData as $value) {
+if ($i<4) {
+  echo "&#x25a2";
+  echo " ".$value['name'];
+  echo "<br>";
+}
+$i=$i+1;
+}
+ ?>
 
+</div>
+<div id="todo2">
   <?php
   $i=0;
   foreach ($trelloData as $value) {
-  if ($i<6) {
+  if ($i>4) {
     echo "&#x25a2";
     echo " ".$value['name'];
     echo "<br>";
   }
   $i=$i+1;
   }
-  ?>
-  </div> 
-</div> 
-<div id="textContainer3" style="width:50%; float:right">
-  <div id="todo2">
-      <b>Trending on Twitter: </b>
-  <?php
-      echo $stringgerr;
-  ?>
-  </div>
+   ?>
+</div>
+<div id="LineChartContainer">
+  <canvas id="myLineChart"></canvas>
 </div>
 
-  <div id="LineChartContainer">
-    <canvas id="myLineChart"></canvas>
-  </div>
+
+
 
     <script>
     <?php echo "var productiveHours= ". $js_productiveHours. ";\n"; ?>
@@ -267,7 +260,7 @@ console.log(days);
 },
 {
   borderColor:"#ff0000",
-  label:"Distracted",
+  label:"Distractive",
   data:distractiveHours
 }
         ]
@@ -300,7 +293,7 @@ console.log(days);
     <?php echo "var categories= ". $js_array . ";\n"; ?>
     <?php echo "var secondsArray = ". $js_array2 . ";\n";?>
     var categoriesRadar = [];
-    var secondsRadar = [0,0,0,0,0,0];
+    var secondsRadar = [0,0,0,0,0];
     for (var i=0; i<categories.length;i++){
       if (categories[i]=="Video"||categories[i]=="General Social Networking"||categories[i]=="General Entertainment"||categories[i]=="Games") {
         secondsRadar[0]=secondsRadar[0]+(secondsArray[i]);
@@ -317,16 +310,13 @@ console.log(days);
       if (categories[i]=="Email"||categories[i]=="Instant Message") {
         secondsRadar[4]=secondsRadar[4]+(secondsArray[i]);
       }
-      if (categories[i]=="Business") {
-        secondsRadar[5]=secondsRadar[5]+(secondsArray[i]);
-      }
     }
     //console.log(secondsRadar);
 //YESTERdays data
     <?php echo "var categoriesY= ". $js_arrayY . ";\n"; ?>
     <?php echo "var secondsArrayY = ". $js_array2Y . ";\n";?>
     var categoriesRadarY = [];
-    var secondsRadarY = [0,0,0,0,0,0];
+    var secondsRadarY = [0,0,0,0,0];
     for (var i=0; i<categoriesY.length;i++){
       if (categoriesY[i]=="Video"||categoriesY[i]=="General Social Networking"||categoriesY[i]=="General Entertainment"||categoriesY[i]=="Games") {
         secondsRadarY[0]=secondsRadarY[0]+(secondsArrayY[i]);
@@ -343,9 +333,6 @@ console.log(days);
       if (categoriesY[i]=="Email"||categoriesY[i]=="Instant Message") {
         secondsRadarY[4]=secondsRadarY[4]+(secondsArrayY[i]);
       }
-      if (categories[i]=="Business") {
-        secondsRadar[5]=secondsRadar[5]+(secondsArray[i]);
-      }
     }
     //console.log(secondsRadar);
 Chart.defaults.global.defaultFontColor = '#fff';
@@ -354,7 +341,7 @@ Chart.defaults.global.defaultFontColor = '#fff';
 var myDoughnutChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-          labels: ['Distracted', 'Productive'],
+          labels: ['Distractive', 'Productive'],
           datasets: [{
             backgroundColor: [
         "#ff0000",
@@ -384,21 +371,25 @@ animation: {
 var ctx = document.getElementById("myRadarChart");
 var color = Chart.helpers.color;
 var myRadarChart = new Chart(ctx, {
-    type: 'polarArea',
+    type: 'radar',
     data:  {
-    labels: ['Entertainment', 'Software Dev.', 'News', 'Learning', 'Email & Chat', 'Business'],
+    labels: ['Entertainment', 'Software Dev.', 'News&Opinion', 'Learning','communication'],
     datasets: [{
         label: "Minutes Spent Today",
-        backgroundColor: color(chartColors.yellow).alpha(0.5).rgbString(),
+        backgroundColor: color(chartColors.red).alpha(0.5).rgbString(),
         pointColor: "rgb(255,255,255)",
-        borderColor:"yellow",
+        borderColor:"red",
+        pointBorderColor:"white",
+        pointBackgroundColor:"white",
         data: secondsRadar
     },
     {
       label: "Minutes Spent Yesterday",
-      backgroundColor: color(chartColors.grey).alpha(0.5).rgbString(),
+      backgroundColor: color(chartColors.blue).alpha(0.5).rgbString(),
       pointColor: "rgb(255,255,255)",
-      borderColor:"grey",
+      borderColor:"blue",
+      pointBorderColor:"white",
+      pointBackgroundColor:"white",
       data: secondsRadarY
     }
   ]
@@ -406,18 +397,18 @@ var myRadarChart = new Chart(ctx, {
 options:{
   scale:{
     pointLabels:{
-      fontSize:11
+      fontSize:8
     },
     lineArc: true,
     position: "chartArea",
         angleLines: {
-            display: false,
+            display: true,
             color: "rgb(255,255,255)",
             lineWidth: 1
         },
         gridLines: {
           color: 'rgba(255, 255, 255, 0.4)',
-          tickMarkLength: 15
+          tickMarkLength: 20
         },
     // label settings
     ticks: {
