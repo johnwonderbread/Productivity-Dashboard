@@ -76,7 +76,7 @@ $testArray=
 
 $posTotal = 0; #Positive seconds (seconds spent on a program times the productivity value)
 $negTotal = 0; #Negative seconds (seconds spent on a program times the productivity value)
-$absTotal = 1;
+$absTotal = 0;
 
 #this for loop gets seconds spent from the json file
 foreach ($data['rows'] as $key => $value) {
