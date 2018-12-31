@@ -4,21 +4,55 @@ $page = $_SERVER['PHP_SELF'];
 #Seconds to refresh the webpage
 $sec = "300";
 
-require_once("twitteroauth/twitteroauth/twitteroauth.php"); // path to Twitter oauth library
-$consumerkey = "TfpS7e2C58gTrOyfBJiTEdqoN";
-$consumersecret = "0P50iRU7g8YnQnjksVhcG44UI7VUYcimwAi5rSN12HPLyd7DjW";
-$accesstoken = "389354485-iNYvlYonPKLF9Q27dx9l18ToCHmcjH2KsBs091pG";
-$accesstokensecret = "pTAoscNcEAMl8yPP1GLcauTDUlV7nvlDoC8WqZT6uYCJP";
-$woeid = 2459115;
-$url= 'https://api.twitter.com/1.1/trends/place.json?id='.$woeid;
+#require_once("twitteroauth/twitteroauth/twitteroauth.php"); // path to Twitter oauth library
+#$consumerkey = "TfpS7e2C58gTrOyfBJiTEdqoN";
+#$consumersecret = "0P50iRU7g8YnQnjksVhcG44UI7VUYcimwAi5rSN12HPLyd7DjW";
+#$accesstoken = "389354485-iNYvlYonPKLF9Q27dx9l18ToCHmcjH2KsBs091pG";
+#$accesstokensecret = "pTAoscNcEAMl8yPP1GLcauTDUlV7nvlDoC8WqZT6uYCJP";
+#$woeid = 2459115;
+#$url= 'https://api.twitter.com/1.1/trends/place.json?id='.$woeid;
 
-function getConnectionWithAccessToken($cons_key, $cons_secret, $oauth_token, $oauth_token_secret) {
-    $connection = new TwitterOAuth($cons_key, $cons_secret, $oauth_token, $oauth_token_secret);
-    return $connection;
-  }
+#function getConnectionWithAccessToken($cons_key, $cons_secret, $oauth_token, $oauth_token_secret) {
+#    $connection = new TwitterOAuth($cons_key, $cons_secret, $oauth_token, $oauth_token_secret);
+#    return $connection;
+#  }
    
-$connection = getConnectionWithAccessToken($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);
-$trends = $connection->get($url);
+#$connection = getConnectionWithAccessToken($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);
+#$statues = $connection->get($url);
+
+$ConsumerKeyAPIKey="TfpS7e2C58gTrOyfBJiTEdqoN";
+$ConsumerSecretAPISecret="0P50iRU7g8YnQnjksVhcG44UI7VUYcimwAi5rSN12HPLyd7DjW";
+$access_token="389354485-iNYvlYonPKLF9Q27dx9l18ToCHmcjH2KsBs091pG";
+$access_token_secret="pTAoscNcEAMl8yPP1GLcauTDUlV7nvlDoC8WqZT6uYCJP";
+$NumberOfTags=15; //keep as minimum as possible
+$GeoLocleID="2459115";
+require "twitteroauth/autoload.php";
+use Abraham\TwitterOAuth\TwitterOAuth;
+$connection = new TwitterOAuth($ConsumerKeyAPIKey, $ConsumerSecretAPISecret, $access_token, $access_token_secret);
+$statues = $connection->get("trends/place", ["id" => $GeoLocleID]);
+$stringgerr="";
+$i=1;
+foreach($statues as $hash)
+{    $inner=$hash->trends;
+    foreach($inner as $in)
+    {
+        
+        $value=$in->name;
+        
+        if (strpos($value, '#') !== false) {
+        $value=$value;
+        } else {
+        $value="#".$value;
+        }
+        $stringgerr.=str_replace(" ","_",$value)." ";
+        
+        if($i==$NumberOfTags)
+        break;
+        $i++;
+    }
+    if($i==$NumberOfTags)
+        break;
+};
 
 $testArray=
       $trelloUrl=file_get_contents("https://api.trello.com/1/lists/5c279a32c559d774922e4c96/cards?fields=name&key=3eb41f0d472d8ff304bd8c990f0024b6&token=06f3574635413aafdc7ce89989da1494e3ee88b6f32d7165f2ad2043f8534ede");
@@ -29,7 +63,6 @@ $testArray=
       $dataY = json_decode($urlContentsY,true); #rescuetime yesterday's data
       $data2 = json_decode($urlContents2,true); #recuetime daily summary
       $trelloData = json_decode($trelloUrl,true); #trello cards
-      $trends = json_decode(json_encode($trends), true);
 
 #---------------------Test Commands-------------------
 #echo "Date= ".date('Y-m-d');
@@ -43,7 +76,7 @@ $testArray=
 
 $posTotal = 0; #Positive seconds (seconds spent on a program times the productivity value)
 $negTotal = 0; #Negative seconds (seconds spent on a program times the productivity value)
-$absTotal = 0;
+$absTotal = 1;
 
 #this for loop gets seconds spent from the json file
 foreach ($data['rows'] as $key => $value) {
@@ -188,7 +221,7 @@ right: 2%;
     color: white;
     margin-left: 50%;
     width: 380px;
-    margin-top: -150px;
+    margin-top: -30px;
   }
   #container{
 background-color: black;
@@ -260,18 +293,9 @@ $i=$i+1;
 </div>
 
 <div id="todo2">
-  <?php
-    $i=0;
-
-    foreach ($trends as $trend) {
-        if ($i<6) {
-            if (is_array($trends)) {
-                return $trends[0];
-            } else {
-                return null; 
-            }
-        } $i = $i+1;
- };
+    <b>NYC Trending on Twitter: </b>
+ <?php
+    echo $stringgerr;
  ?>
 </div>
 <div id="LineChartContainer">
