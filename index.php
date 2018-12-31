@@ -2,10 +2,10 @@
 $page = $_SERVER['PHP_SELF'];
 #Seconds to refresh the webpage
 $sec = "360";
-$ConsumerKeyAPIKey="TfpS7e2C58gTrOyfBJiTEdqoN";
+$ConsumerKeyAPIKey="xAttaU2OyjqzGflJvwPcMZW1C";
 $ConsumerSecretAPISecret="0P50iRU7g8YnQnjksVhcG44UI7VUYcimwAi5rSN12HPLyd7DjW";
-$access_token="389354485-iNYvlYonPKLF9Q27dx9l18ToCHmcjH2KsBs091pG";
-$access_token_secret="pTAoscNcEAMl8yPP1GLcauTDUlV7nvlDoC8WqZT6uYCJP";
+$access_token="389354485-IwlBsofUyBto5ii1Hcyk9YttLsBKUaXoGeXbd17S";
+$access_token_secret="HuJGFcWxkK9NZP1970pDihKuJAHdRKJdqtRHyubXStDhp";
 $NumberOfTags=18; //keep as minimum as possible
 $GeoLocleID="23424977";
 require "twitteroauth/autoload.php";
@@ -37,9 +37,9 @@ foreach($statues as $hash)
 };
 $testArray=
       $trelloUrl=file_get_contents("https://api.trello.com/1/lists/5c279a32c559d774922e4c96/cards?fields=name&key=3eb41f0d472d8ff304bd8c990f0024b6&token=06f3574635413aafdc7ce89989da1494e3ee88b6f32d7165f2ad2043f8534ede");
-      $urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm&perspective=rank&interval=hour&restrict_begin=".date('Y-m-d')."&restrict_end=".date('Y-m-d')."&format=json");
-      $urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm&perspective=rank&interval=hour&restrict_begin=".date('d.m.Y',strtotime("-1 days"))."&restrict_end=".date('d.m.Y',strtotime("-1 days"))."&format=json");
-      $urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm");
+      $urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG&perspective=rank&interval=hour&restrict_begin=".date('Y-m-d')."&restrict_end=".date('Y-m-d')."&format=json");
+      $urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG&perspective=rank&interval=hour&restrict_begin=".date('d.m.Y',strtotime("-1 days"))."&restrict_end=".date('d.m.Y',strtotime("-1 days"))."&format=json");
+      $urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG");
       $data = json_decode($urlContents,true);
       $dataY = json_decode($urlContentsY,true); #rescuetime yesterday's data
       $data2 = json_decode($urlContents2,true); #recuetime daily summary
