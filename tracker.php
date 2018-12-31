@@ -4,22 +4,6 @@ $page = $_SERVER['PHP_SELF'];
 #Seconds to refresh the webpage
 $sec = "300";
 
-#require_once("twitteroauth/twitteroauth/twitteroauth.php"); // path to Twitter oauth library
-#$consumerkey = "TfpS7e2C58gTrOyfBJiTEdqoN";
-#$consumersecret = "0P50iRU7g8YnQnjksVhcG44UI7VUYcimwAi5rSN12HPLyd7DjW";
-#$accesstoken = "389354485-iNYvlYonPKLF9Q27dx9l18ToCHmcjH2KsBs091pG";
-#$accesstokensecret = "pTAoscNcEAMl8yPP1GLcauTDUlV7nvlDoC8WqZT6uYCJP";
-#$woeid = 2459115;
-#$url= 'https://api.twitter.com/1.1/trends/place.json?id='.$woeid;
-
-#function getConnectionWithAccessToken($cons_key, $cons_secret, $oauth_token, $oauth_token_secret) {
-#    $connection = new TwitterOAuth($cons_key, $cons_secret, $oauth_token, $oauth_token_secret);
-#    return $connection;
-#  }
-   
-#$connection = getConnectionWithAccessToken($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);
-#$statues = $connection->get($url);
-
 $ConsumerKeyAPIKey="TfpS7e2C58gTrOyfBJiTEdqoN";
 $ConsumerSecretAPISecret="0P50iRU7g8YnQnjksVhcG44UI7VUYcimwAi5rSN12HPLyd7DjW";
 $access_token="389354485-iNYvlYonPKLF9Q27dx9l18ToCHmcjH2KsBs091pG";
@@ -104,23 +88,6 @@ foreach ($data['rows'] as $key => $value) {
 $js_array = json_encode($categoriesArray);
 $js_array2 = json_encode($seconds);
 
-#-------------Unneeded Conversion-------------
-#gets trending tweets
-    #$categoriesArray2 = array();
-    #$volume = array(); 
-    #if(is_array($trends)) {
-    #    foreach ($trends as $trend => $value) {
-    #        $categoriesArray2[] = $value[1];
-    #        $volume[] = $value[5];
-    #    } 
-    #};
-
-#twitter data 
-    #$js_array3 = json_encode($categoriesArray2);
-    #$js_array4 = json_encode($volume); 
-#---------------------------------------
-
-
 #-------------Test Commands-------------
 #echo "var javascript_array = ". $js_array . ";\n";
 #echo "var javascript_array = ". $js_array2 . ";\n";
@@ -128,7 +95,6 @@ $js_array2 = json_encode($seconds);
 #echo "<br>";
 #echo "Absolute Total= ".$absTotal;
 #---------------------------------------
-
 
 #gets the categories for each value for yesterday
 $categoriesArrayY = array();
