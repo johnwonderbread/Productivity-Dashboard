@@ -65,7 +65,7 @@ $absTotal = 0;
 #this for loop gets seconds spent from the json file
 foreach ($data['rows'] as $key => $value) {
   $productivity = $value[1] * $value[5];
-  #print_r($productivity);
+  print_r($productivity);
 
   if ($productivity < 0)
 {
@@ -227,7 +227,7 @@ font-size: 25px;
   <div id="percent">
 
 <canvas id="myDoughnutChart" ></canvas>
-<div id="overlay" onClick="window.location.reload()"><?php echo floor(100-(abs($negTotal)*100)/$absTotal); ?></div>
+<div id="overlay" onClick="window.location.reload()"><?php echo floor(100-(abs($negTotal)*100)/1); ?></div>
 </div>
 </div>
 </div>
