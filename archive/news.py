@@ -4,7 +4,7 @@ import requests
 def TopUsNews(): 
 	
 	# BBC news api 
-	main_url = " https://newsapi.org/v2/top-headlines?country=us&apiKey=ebeb2407fbbc417b8ab91a17157d7e1b"
+	main_url = " https://newsapi.org/v2/top-headlines?country=us&apiKey="
 
 	# fetching data in json format 
 	open_page = requests.get(main_url).json() 

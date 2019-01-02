@@ -3,17 +3,6 @@ $page = $_SERVER['PHP_SELF'];
 
 #Seconds to refresh the webpage
 $sec = "360";
-
-$testArray=
-      $trelloUrl=file_get_contents("https://api.trello.com/1/lists/5c279a32c559d774922e4c96/cards?fields=name&key=3eb41f0d472d8ff304bd8c990f0024b6&token=06f3574635413aafdc7ce89989da1494e3ee88b6f32d7165f2ad2043f8534ede");
-      $urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm&perspective=rank&interval=hour&restrict_begin=".date('Y-m-d')."&restrict_end=".date('Y-m-d')."&format=json");
-      $urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm&perspective=rank&interval=hour&restrict_begin=".date('d.m.Y',strtotime("-1 days"))."&restrict_end=".date('d.m.Y',strtotime("-1 days"))."&format=json");
-      $urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=B63txiFZVjFySGvj_uZlaxV__NaKEDnwytERDZHm");
-      $data = json_decode($urlContents,true);
-      $dataY = json_decode($urlContentsY,true); #rescuetime yesterday's data
-      $data2 = json_decode($urlContents2,true); #recuetime daily summary
-      $trelloData = json_decode($trelloUrl,true); #trello cards
-
 #---------------------Test Commands-------------------
 #echo "Date= ".date('Y-m-d');
 #echo $data['rows'][0][3];

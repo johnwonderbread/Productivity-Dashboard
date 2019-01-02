@@ -1,26 +1,28 @@
 <?php
+include 'apikeys.php';
 
 $page = $_SERVER['PHP_SELF'];
 #Seconds to refresh the webpage
 $sec = "600";
 #NewsAPI Call
-  $newsKey = "ebeb2407fbbc417b8ab91a17157d7e1b"; 
-  $sources = "the-new-york-times,bbc-news,abc-news,al-jazeera-english,bloomberg,business-insider,fox-news,bleacher-report,associated-press,espn,nbc-news";
-  $newsContents = file_get_contents("https://newsapi.org/v2/top-headlines?sources=".$sources."&apiKey=ebeb2407fbbc417b8ab91a17157d7e1b");
-  $newsData = json_decode($newsContents,true); 
-  #var_dump($newsData);
-  
+
+$sources = "the-new-york-times,bbc-news,abc-news,al-jazeera-english,bloomberg,business-insider,fox-news,bleacher-report,associated-press,espn,nbc-news";
+$newsContents = file_get_contents("https://newsapi.org/v2/top-headlines?sources=" . $sources . "&apiKey=".$newsKey);
+$newsData = json_decode($newsContents, true);
+#var_dump($newsData);
+
 #Trello API Call
-    $trelloUrl=file_get_contents("https://api.trello.com/1/lists/5c279a32c559d774922e4c96/cards?fields=name&key=3eb41f0d472d8ff304bd8c990f0024b6&token=06f3574635413aafdc7ce89989da1494e3ee88b6f32d7165f2ad2043f8534ede");
-   
-#RescueTime API Call  
-    $urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG&perspective=rank&interval=hour&restrict_begin=".date('Y-m-d')."&restrict_end=".date('Y-m-d')."&format=json");
-    $urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG&perspective=rank&interval=hour&restrict_begin=".date('d.m.Y',strtotime("-1 days"))."&restrict_end=".date('d.m.Y',strtotime("-1 days"))."&format=json");
-    $urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG");
-          $data = json_decode($urlContents,true);
-          $dataY = json_decode($urlContentsY,true); #rescuetime yesterday's data
-          $data2 = json_decode($urlContents2,true); #recuetime daily summary
-          $trelloData = json_decode($trelloUrl,true); #trello cards
+$list = "5c279a32c559d774922e4c96";
+$trelloUrl = file_get_contents("https://api.trello.com/1/lists/".$list."/cards?fields=name&key=".$trelloKey."&token=".$trelloToken);
+
+#RescueTime API Call
+$urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=".$rescuetimeKey."&perspective=rank&interval=hour&restrict_begin=" . date('Y-m-d') . "&restrict_end=" . date('Y-m-d') . "&format=json");
+$urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key".$rescuetimeKey."=&perspective=rank&interval=hour&restrict_begin=" . date('d.m.Y', strtotime("-1 days")) . "&restrict_end=" . date('d.m.Y', strtotime("-1 days")) . "&format=json");
+$urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=".$rescuetimeKey.");
+$data = json_decode($urlContents, true);
+$dataY = json_decode($urlContentsY, true); #rescuetime yesterday's data
+$data2 = json_decode($urlContents2, true); #recuetime daily summary
+$trelloData = json_decode($trelloUrl, true); #trello cards
 
 #---------------------Test Commands-------------------
 #echo "Date= ".date('Y-m-d');
@@ -36,22 +38,21 @@ $negTotal = 0; #Negative seconds (seconds spent on a program times the productiv
 $absTotal = 0;
 #this for loop gets seconds spent from the json file
 foreach ($data['rows'] as $key => $value) {
-  $productivity = $value[1] * $value[5];
-  #print_r($productivity);
-  if ($productivity < 0)
-{
-   $negTotal = $negTotal + $productivity;
-}
-   $absTotal = $absTotal + abs($productivity);
+    $productivity = $value[1] * $value[5];
+    #print_r($productivity);
+    if ($productivity < 0) {
+        $negTotal = $negTotal + $productivity;
+    }
+    $absTotal = $absTotal + abs($productivity);
 }
 #gets the categories for each value
 $categoriesArray = array();
 $seconds = array();
 $totalSeconds = 0;
 foreach ($data['rows'] as $key => $value) {
-  $categoriesArray[] = $value[4];
-  $seconds[] = floor($value[1]/60);
-  $totalSeconds = $totalSeconds + $value[1];
+    $categoriesArray[] = $value[4];
+    $seconds[] = floor($value[1] / 60);
+    $totalSeconds = $totalSeconds + $value[1];
 }
 #radar graph data
 $js_array = json_encode($categoriesArray);
@@ -70,26 +71,26 @@ $categoriesArrayY = array();
 $secondsY = array();
 $totalSecondsY = 0;
 foreach ($dataY['rows'] as $key => $value) {
-  $categoriesArrayY[] = $value[4];
-  $secondsY[] = floor($value[1]/60);
-  $totalSecondsY = $totalSecondsY + $value[1];
-   #echo "it is: ".$categoriesArrayY;
- #echo "<br>";
+    $categoriesArrayY[] = $value[4];
+    $secondsY[] = floor($value[1] / 60);
+    $totalSecondsY = $totalSecondsY + $value[1];
+    #echo "it is: ".$categoriesArrayY;
+    #echo "<br>";
 }
 #radar graph data for Yesterday
 $js_arrayY = json_encode($categoriesArrayY);
 #echo "var javascript_array = ". $js_array . ";\n";
 $js_array2Y = json_encode($secondsY);
 #calculate productive hours
-$productiveHours=array();
-$distractiveHours=array();
-$i=0;
+$productiveHours = array();
+$distractiveHours = array();
+$i = 0;
 foreach ($data2 as $value) {
-  if ($i<7) {
-    $productiveHours[]=$value['all_productive_hours'];
-    $distractiveHours[]=$value['all_distracting_hours'];
-  }
-  $i=$i+1;
+    if ($i < 7) {
+        $productiveHours[] = $value['all_productive_hours'];
+        $distractiveHours[] = $value['all_distracting_hours'];
+    }
+    $i = $i + 1;
 }
 #print_r($productiveHours);
 #print_r($distractiveHours);
@@ -100,7 +101,7 @@ $js_distractiveHours = json_encode($distractiveHours);
 <!DOCTYPE html>
 <html lang="en">
   <head>
-     <meta http-equiv="refresh" content="<?php echo $sec?>;URL='<?php echo $page?>'">
+     <meta http-equiv="refresh" content="<?php echo $sec ?>;URL='<?php echo $page ?>'">
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -175,60 +176,63 @@ font-size: 25px;
   <body>
 
 <div id="container" style="width:100%">
-<div id="doughnut">
-<div style="margin-left:10%;width:25%; float:left;">
-  <div id="percent">
+  <div id="doughnut">
+    <div style="margin-left:10%;width:25%; float:left;">
+      <div id="percent">
+      <canvas id="myDoughnutChart" ></canvas>
+        <div id="overlay" onClick="window.location.reload()"><?php echo floor(100 - (abs($negTotal) * 100) / $absTotal); ?>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<canvas id="myDoughnutChart" ></canvas>
-<div id="overlay" onClick="window.location.reload()"><?php echo floor(100-(abs($negTotal)*100)/$absTotal); ?></div>
-</div>
-</div>
-</div>
 <div id="container2" style="margin-left:50%; width:45%;">
-<canvas id="myRadarChart" style="position:relative;" ></canvas>
+  <canvas id="myRadarChart" style="position:relative;" ></canvas>
 </div>
+
 <div id="textContainer">
-<?php echo "Total Time (MB Pro + PC + Pixel): ".floor($totalSeconds/60)." Minutes"; ?>
+  <?php echo "Total Time (MB Pro + PC + Pixel): " . floor($totalSeconds / 60) . " Minutes"; ?>
 </div>
 
 <div id="textContainer2" style="width:50%; float:left">
   <div id="todo">
-  <?php
-  $i=0;
-  foreach ($trelloData as $value) {
-  if ($i<6) {
-    echo "&#x25a2";
-    echo " ".$value['name'];
-    echo "<br>";
-  }
-  $i=$i+1;
-  }
-  ?>
-  </div> 
-</div> 
-<div id="textContainer3" style="width:50%; float:right">
-  <div id="todo2">
     <?php
-      $i=1; 
-      $headLength = 55;
-      $agencyLength = 5; 
-      do {
-        $agency = $newsData['articles'][$i]['source']['name'];
-        $headline = $newsData['articles'][$i]['title'];
-        echo nl2br('['.substr($agency, 0, $agencyLength).'] '.substr($headline, 0, $headLength)."...\n");
-        $i=$i+1;
-      } while ($i < 6); 
-    ?> 
+$i = 0;
+foreach ($trelloData as $value) {
+    if ($i < 6) {
+        echo "&#x25a2";
+        echo " " . $value['name'];
+        echo "<br>";
+    }
+    $i = $i + 1;
+}
+?>
   </div>
 </div>
 
-  <div id="LineChartContainer">
-    <canvas id="myLineChart"></canvas>
+<div id="textContainer3" style="width:50%; float:right">
+  <div id="todo2">
+    <?php
+$i = 1;
+$headLength = 55;
+$agencyLength = 5;
+do {
+    $agency = $newsData['articles'][$i]['source']['name'];
+    $headline = $newsData['articles'][$i]['title'];
+    echo nl2br('[' . substr($agency, 0, $agencyLength) . '] ' . substr($headline, 0, $headLength) . "...\n");
+    $i = $i + 1;
+} while ($i < 6);
+?>
   </div>
+</div>
+
+<div id="LineChartContainer">
+  <canvas id="myLineChart"></canvas>
+</div>
 
     <script>
-    <?php echo "var productiveHours= ". $js_productiveHours. ";\n"; ?>
-    <?php echo "var distractiveHours = ". $js_distractiveHours . ";\n";?>
+    <?php echo "var productiveHours= " . $js_productiveHours . ";\n"; ?>
+    <?php echo "var distractiveHours = " . $js_distractiveHours . ";\n"; ?>
 productiveHours.reverse();
 distractiveHours.reverse();
     var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -283,8 +287,8 @@ console.log(days);
     }
       }
     });
-    <?php echo "var categories= ". $js_array . ";\n"; ?>
-    <?php echo "var secondsArray = ". $js_array2 . ";\n";?>
+    <?php echo "var categories= " . $js_array . ";\n"; ?>
+    <?php echo "var secondsArray = " . $js_array2 . ";\n"; ?>
     var categoriesRadar = [];
     var secondsRadar = [0,0,0,0,0,0];
     for (var i=0; i<categories.length;i++){
@@ -309,8 +313,8 @@ console.log(days);
     }
     //console.log(secondsRadar);
 //YESTERdays data
-    <?php echo "var categoriesY= ". $js_arrayY . ";\n"; ?>
-    <?php echo "var secondsArrayY = ". $js_array2Y . ";\n";?>
+    <?php echo "var categoriesY= " . $js_arrayY . ";\n"; ?>
+    <?php echo "var secondsArrayY = " . $js_array2Y . ";\n"; ?>
     var categoriesRadarY = [];
     var secondsRadarY = [0,0,0,0,0,0];
     for (var i=0; i<categoriesY.length;i++){
@@ -336,7 +340,7 @@ console.log(days);
     //console.log(secondsRadar);
 Chart.defaults.global.defaultFontColor = '#fff';
     var ctx = document.getElementById("myDoughnutChart");
-    var negative = "<?php echo (abs($negTotal)*100)/$absTotal; ?>";
+    var negative = "<?php echo (abs($negTotal) * 100) / $absTotal; ?>";
 var myDoughnutChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
