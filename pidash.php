@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
+
 include 'apikeys.php';
 
 $page = $_SERVER['PHP_SELF'];
@@ -7,25 +9,24 @@ $sec = "600";
 #NewsAPI Call
 
 $sources = "the-new-york-times,bbc-news,abc-news,al-jazeera-english,bloomberg,business-insider,fox-news,bleacher-report,associated-press,espn,nbc-news";
-$newsContents = file_get_contents("https://newsapi.org/v2/top-headlines?sources=" . $sources . "&apiKey=".$newsKey);
+$newsContents = file_get_contents("https://newsapi.org/v2/top-headlines?sources=" . $sources . "&apiKey=" . $newsKey);
 $newsData = json_decode($newsContents, true);
 #var_dump($newsData);
 
 #Trello API Call
 $list = "5c279a32c559d774922e4c96";
-$trelloUrl = file_get_contents("https://api.trello.com/1/lists/".$list."/cards?fields=name&key=".$trelloKey."&token=".$trelloToken);
+$trelloUrl = file_get_contents("https://api.trello.com/1/lists/" . $list . "/cards?fields=name&key=" . $trelloKey . "&token=" . $trelloToken);
 
 #RescueTime API Call
 $urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=".$rescuetimeKey."&perspective=rank&interval=hour&restrict_begin=" . date('Y-m-d') . "&restrict_end=" . date('Y-m-d') . "&format=json");
 $urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key".$rescuetimeKey."=&perspective=rank&interval=hour&restrict_begin=" . date('d.m.Y', strtotime("-1 days")) . "&restrict_end=" . date('d.m.Y', strtotime("-1 days")) . "&format=json");
-$urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=".$rescuetimeKey.");
+$urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=".$rescuetimeKey);
 $data = json_decode($urlContents, true);
 $dataY = json_decode($urlContentsY, true); #rescuetime yesterday's data
 $data2 = json_decode($urlContents2, true); #recuetime daily summary
 $trelloData = json_decode($trelloUrl, true); #trello cards
 
 #---------------------Test Commands-------------------
-#echo "Date= ".date('Y-m-d');
 #echo $data['rows'][0][3];
 #print_r($data);
 #print_r($data2);
@@ -37,23 +38,29 @@ $posTotal = 0; #Positive seconds (seconds spent on a program times the productiv
 $negTotal = 0; #Negative seconds (seconds spent on a program times the productivity value)
 $absTotal = 0;
 #this for loop gets seconds spent from the json file
-foreach ($data['rows'] as $key => $value) {
-    $productivity = $value[1] * $value[5];
-    #print_r($productivity);
-    if ($productivity < 0) {
-        $negTotal = $negTotal + $productivity;
-    }
-    $absTotal = $absTotal + abs($productivity);
-}
+if(is_array($data))
+{
+  foreach ($data['rows'] as $key => $value) {
+      $productivity = $value[1] * $value[5];
+      #print_r($productivity);
+      if ($productivity < 0) {
+          $negTotal = $negTotal + $productivity;
+      }
+      $absTotal = $absTotal + abs($productivity);
+  }
+};
 #gets the categories for each value
 $categoriesArray = array();
 $seconds = array();
 $totalSeconds = 0;
-foreach ($data['rows'] as $key => $value) {
-    $categoriesArray[] = $value[4];
-    $seconds[] = floor($value[1] / 60);
-    $totalSeconds = $totalSeconds + $value[1];
-}
+if(is_array($data))
+{
+  foreach ($data['rows'] as $key => $value) {
+      $categoriesArray[] = $value[4];
+      $seconds[] = floor($value[1] / 60);
+      $totalSeconds = $totalSeconds + $value[1];
+  }
+};
 #radar graph data
 $js_array = json_encode($categoriesArray);
 $js_array2 = json_encode($seconds);
@@ -70,13 +77,16 @@ $js_array2 = json_encode($seconds);
 $categoriesArrayY = array();
 $secondsY = array();
 $totalSecondsY = 0;
-foreach ($dataY['rows'] as $key => $value) {
-    $categoriesArrayY[] = $value[4];
-    $secondsY[] = floor($value[1] / 60);
-    $totalSecondsY = $totalSecondsY + $value[1];
-    #echo "it is: ".$categoriesArrayY;
-    #echo "<br>";
-}
+if(is_array($dataY))
+{
+  foreach ($dataY['rows'] as $key => $value) {
+      $categoriesArrayY[] = $value[4];
+      $secondsY[] = floor($value[1] / 60);
+      $totalSecondsY = $totalSecondsY + $value[1];
+      #echo "it is: ".$categoriesArrayY;
+      #echo "<br>";
+  }
+};
 #radar graph data for Yesterday
 $js_arrayY = json_encode($categoriesArrayY);
 #echo "var javascript_array = ". $js_array . ";\n";
@@ -85,13 +95,16 @@ $js_array2Y = json_encode($secondsY);
 $productiveHours = array();
 $distractiveHours = array();
 $i = 0;
-foreach ($data2 as $value) {
-    if ($i < 7) {
-        $productiveHours[] = $value['all_productive_hours'];
-        $distractiveHours[] = $value['all_distracting_hours'];
-    }
-    $i = $i + 1;
-}
+if(is_array($data2)) 
+{
+  foreach ($data2 as $value) {
+      if ($i < 7) {
+          $productiveHours[] = $value['all_productive_hours'];
+          $distractiveHours[] = $value['all_distracting_hours'];
+      }
+      $i = $i + 1;
+  }
+};
 #print_r($productiveHours);
 #print_r($distractiveHours);
 $js_productiveHours = json_encode($productiveHours);
@@ -197,16 +210,19 @@ font-size: 25px;
 <div id="textContainer2" style="width:50%; float:left">
   <div id="todo">
     <?php
-$i = 0;
-foreach ($trelloData as $value) {
-    if ($i < 6) {
-        echo "&#x25a2";
-        echo " " . $value['name'];
-        echo "<br>";
-    }
-    $i = $i + 1;
-}
-?>
+      $i = 0;
+      if(is_array($trelloData))
+      {
+        foreach ($trelloData as $value) {
+            if ($i < 6) {
+                echo "&#x25a2";
+                echo " " . $value['name'];
+                echo "<br>";
+            }
+            $i = $i + 1;
+        }
+      };
+    ?>
   </div>
 </div>
 
