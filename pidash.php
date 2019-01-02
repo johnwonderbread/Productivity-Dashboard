@@ -1,72 +1,50 @@
 <?php
+
 $page = $_SERVER['PHP_SELF'];
 #Seconds to refresh the webpage
-$sec = "360";
-$ConsumerKeyAPIKey="xAttaU2OyjqzGflJvwPcMZW1C";
-$ConsumerSecretAPISecret="0P50iRU7g8YnQnjksVhcG44UI7VUYcimwAi5rSN12HPLyd7DjW";
-$access_token="389354485-IwlBsofUyBto5ii1Hcyk9YttLsBKUaXoGeXbd17S";
-$access_token_secret="HuJGFcWxkK9NZP1970pDihKuJAHdRKJdqtRHyubXStDhp";
-$NumberOfTags=18; //keep as minimum as possible
-$GeoLocleID="23424977";
-require "twitteroauth/autoload.php";
-use Abraham\TwitterOAuth\TwitterOAuth;
-$connection = new TwitterOAuth($ConsumerKeyAPIKey, $ConsumerSecretAPISecret, $access_token, $access_token_secret);
-$statues = $connection->get("trends/place", ["id" => $GeoLocleID]);
-$stringgerr="";
-$i=1;
-foreach($statues as $hash)
-{    $inner=$hash->trends;
-    foreach($inner as $in)
-    {
-        
-        $value=$in->name;
-        
-        if (strpos($value, '#') !== false) {
-        $value=$value;
-        } else {
-        $value="#".$value;
-        }
-        $stringgerr.=str_replace(" ","_",$value)." ";
-        
-        if($i==$NumberOfTags)
-        break;
-        $i++;
-    }
-    if($i==$NumberOfTags)
-        break;
-};
-$testArray=
-      $trelloUrl=file_get_contents("https://api.trello.com/1/lists/5c279a32c559d774922e4c96/cards?fields=name&key=3eb41f0d472d8ff304bd8c990f0024b6&token=06f3574635413aafdc7ce89989da1494e3ee88b6f32d7165f2ad2043f8534ede");
-      $urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG&perspective=rank&interval=hour&restrict_begin=".date('Y-m-d')."&restrict_end=".date('Y-m-d')."&format=json");
-      $urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG&perspective=rank&interval=hour&restrict_begin=".date('d.m.Y',strtotime("-1 days"))."&restrict_end=".date('d.m.Y',strtotime("-1 days"))."&format=json");
-      $urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG");
-      $data = json_decode($urlContents,true);
-      $dataY = json_decode($urlContentsY,true); #rescuetime yesterday's data
-      $data2 = json_decode($urlContents2,true); #recuetime daily summary
-      $trelloData = json_decode($trelloUrl,true); #trello cards
+$sec = "600";
+#NewsAPI Call
+  $newsKey = "ebeb2407fbbc417b8ab91a17157d7e1b"; 
+  $sources = "the-new-york-times,bbc-news,abc-news,al-jazeera-english,bloomberg,business-insider,fox-news,bleacher-report,associated-press,espn,nbc-news";
+  $newsContents = file_get_contents("https://newsapi.org/v2/top-headlines?sources=".$sources."&apiKey=ebeb2407fbbc417b8ab91a17157d7e1b");
+  $newsData = json_decode($newsContents,true); 
+  #var_dump($newsData);
+  
+#Trello API Call
+    $trelloUrl=file_get_contents("https://api.trello.com/1/lists/5c279a32c559d774922e4c96/cards?fields=name&key=3eb41f0d472d8ff304bd8c990f0024b6&token=06f3574635413aafdc7ce89989da1494e3ee88b6f32d7165f2ad2043f8534ede");
+   
+#RescueTime API Call  
+    $urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG&perspective=rank&interval=hour&restrict_begin=".date('Y-m-d')."&restrict_end=".date('Y-m-d')."&format=json");
+    $urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG&perspective=rank&interval=hour&restrict_begin=".date('d.m.Y',strtotime("-1 days"))."&restrict_end=".date('d.m.Y',strtotime("-1 days"))."&format=json");
+    $urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=B63wPRgr0cS8o9DWGy8vOXDubXYUCV0KmXEVm1iG");
+          $data = json_decode($urlContents,true);
+          $dataY = json_decode($urlContentsY,true); #rescuetime yesterday's data
+          $data2 = json_decode($urlContents2,true); #recuetime daily summary
+          $trelloData = json_decode($trelloUrl,true); #trello cards
+
 #---------------------Test Commands-------------------
 #echo "Date= ".date('Y-m-d');
 #echo $data['rows'][0][3];
 #print_r($data);
 #print_r($data2);
 #print_r($dataY);
-#print_r($trelloData);
-#print_r($trends);
+#print_r($statues);
 #-----------------------------------------------------
+
 $posTotal = 0; #Positive seconds (seconds spent on a program times the productivity value)
 $negTotal = 0; #Negative seconds (seconds spent on a program times the productivity value)
 $absTotal = 0;
 #this for loop gets seconds spent from the json file
 foreach ($data['rows'] as $key => $value) {
   $productivity = $value[1] * $value[5];
-  print_r($productivity);
+  #print_r($productivity);
   if ($productivity < 0)
 {
    $negTotal = $negTotal + $productivity;
 }
    $absTotal = $absTotal + abs($productivity);
 }
-#gets the categaories for each value
+#gets the categories for each value
 $categoriesArray = array();
 $seconds = array();
 $totalSeconds = 0;
@@ -78,6 +56,7 @@ foreach ($data['rows'] as $key => $value) {
 #radar graph data
 $js_array = json_encode($categoriesArray);
 $js_array2 = json_encode($seconds);
+
 #-------------Test Commands-------------
 #echo "var javascript_array = ". $js_array . ";\n";
 #echo "var javascript_array = ". $js_array2 . ";\n";
@@ -85,6 +64,7 @@ $js_array2 = json_encode($seconds);
 #echo "<br>";
 #echo "Absolute Total= ".$absTotal;
 #---------------------------------------
+
 #gets the categories for each value for yesterday
 $categoriesArrayY = array();
 $secondsY = array();
@@ -213,7 +193,6 @@ font-size: 25px;
 
 <div id="textContainer2" style="width:50%; float:left">
   <div id="todo">
-
   <?php
   $i=0;
   foreach ($trelloData as $value) {
@@ -229,10 +208,17 @@ font-size: 25px;
 </div> 
 <div id="textContainer3" style="width:50%; float:right">
   <div id="todo2">
-      <b>Trending on Twitter: </b>
-  <?php
-      echo $stringgerr;
-  ?>
+    <?php
+      $i=1; 
+      $headLength = 55;
+      $agencyLength = 5; 
+      do {
+        $agency = $newsData['articles'][$i]['source']['name'];
+        $headline = $newsData['articles'][$i]['title'];
+        echo nl2br('['.substr($agency, 0, $agencyLength).'] '.substr($headline, 0, $headLength)."...\n");
+        $i=$i+1;
+      } while ($i < 6); 
+    ?> 
   </div>
 </div>
 
