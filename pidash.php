@@ -19,7 +19,7 @@ $trelloUrl = file_get_contents("https://api.trello.com/1/lists/" . $list . "/car
 
 #RescueTime API Call
 $urlContents = file_get_contents("https://www.rescuetime.com/anapi/data?key=".$rescuetimeKey."&perspective=rank&interval=hour&restrict_begin=" . date('Y-m-d') . "&restrict_end=" . date('Y-m-d') . "&format=json");
-$urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=".$rescuetimeKey."=&perspective=rank&interval=hour&restrict_begin=" . date('d.m.Y', strtotime("-1 days")) . "&restrict_end=" . date('d.m.Y', strtotime("-1 days")) . "&format=json");
+$urlContentsY = file_get_contents("https://www.rescuetime.com/anapi/data?key=".$rescuetimeKey."&perspective=rank&interval=hour&restrict_begin=" . date('d.m.Y', strtotime("-1 days")) . "&restrict_end=" . date('d.m.Y', strtotime("-1 days")) . "&format=json");
 $urlContents2 = file_get_contents("https://www.rescuetime.com/anapi/daily_summary_feed?key=".$rescuetimeKey);
 $data = json_decode($urlContents, true);
 $dataY = json_decode($urlContentsY, true); #rescuetime yesterday's data
